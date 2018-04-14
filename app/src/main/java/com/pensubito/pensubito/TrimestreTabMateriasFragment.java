@@ -3,15 +3,22 @@ package com.pensubito.pensubito;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.pensubito.pensubito.db.DeleteMateriaAsyncTask;
+import com.pensubito.pensubito.db.OnMateriaDeletedListener;
+import com.pensubito.pensubito.db.PensubitoDao;
 import com.pensubito.pensubito.di.Injectable;
 import com.pensubito.pensubito.vm.TrimestreViewModel;
 import com.pensubito.pensubito.vo.Materia;
@@ -26,8 +33,12 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
     @Inject
     public ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    public PensubitoDao pensubitoDao;
+
     private TrimestreViewModel viewModel;
     private RecyclerView mRecyclerView;
+    private DeleteMateriaAsyncTask mDeleteMateriaAsyncTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -62,20 +73,48 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
         mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, materias));
     }
 
+    public void eliminarMateria(int materiaId){
+        mDeleteMateriaAsyncTask = new DeleteMateriaAsyncTask(pensubitoDao,materiaId);
+        mDeleteMateriaAsyncTask.setOnMateriaDeletedListener(new OnMateriaDeletedListener(){
+
+            @Override
+            public void onMateriaDeleted(int materiaId) {
+                CharSequence text = "Materia eliminada";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(getContext(), text, duration);
+                toast.show();
+            }
+        });
+        mDeleteMateriaAsyncTask.execute();
+    }
+
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final TrimestreTabMateriasFragment mParentFragment;
         private final List<Materia> mValues;
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        private final View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+
             @Override
-            public void onClick(View view) {
-//                int trimestreId = (int) view.getTag();
-//                    Context context = view.getContext();
-//                    Intent intent = new Intent(context, TrimestreDetailActivity.class);
-//                    intent.putExtra(TrimestreDetailActivity.ARG_TRIMESTRE_ID, trimestreId);
-//
-//                    context.startActivity(intent);
+            public boolean onLongClick(View view) {
+                final int materiaId = (int) view.getTag();
+                new AlertDialog.Builder(mParentFragment.getContext())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("¿Eliminar esta materia?")
+                        //.setMessage("Are you sure you want to close this activity?")
+                        .setPositiveButton("BORRAR", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mParentFragment.eliminarMateria(materiaId);
+                            }
+
+                        })
+                        .setNegativeButton("CANCELAR", null)
+                        .show();
+
+                return true;
             }
         };
 
@@ -103,7 +142,15 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
             holder.mMateriaName.setText(materiaNombre);
 
             int materiaCreditos = Integer.parseInt(materia.getCreditos());
-            String materiaInfo = materia.getCodigo() + " " + materiaCreditos + " credito" + ((materiaCreditos == 1)?"":"s");
+
+            String materiaInfo = "";
+
+            String materiaCodigo = materia.getCodigo();
+            if(materiaCodigo != null && !materiaCodigo.isEmpty()){
+                materiaInfo += materiaCodigo + " ";
+            }
+
+            materiaInfo += materiaCreditos + " credito" + ((materiaCreditos == 1)?"":"s");
 
             holder.mMateriaInfo.setText(materiaInfo);
 
@@ -113,8 +160,8 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
             }
             holder.mMateriaNota.setText(materiaNota);
 
-            holder.itemView.setTag(materia.getTrimestreId());
-            holder.itemView.setOnClickListener(mOnClickListener);
+            holder.itemView.setTag(materia.getMateriaId());
+            holder.itemView.setOnLongClickListener(mOnLongClickListener);
         }
 
         @Override

@@ -99,4 +99,7 @@ public interface PensubitoDao {
 
     @Query("DELETE from trimestre WHERE trimestre_id = :trimestreId")
     public void deleteTrimestre(int trimestreId);
+
+    @Query("DELETE from materia WHERE materia_id = :materiaId")
+    public void deleteMateria(int materiaId);
 }

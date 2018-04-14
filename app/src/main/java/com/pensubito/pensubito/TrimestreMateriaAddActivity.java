@@ -1,8 +1,6 @@
 package com.pensubito.pensubito;
 
-import android.arch.persistence.room.util.StringUtil;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.pensubito.pensubito.db.InsertNewMateriaTrimestreAsyncTask;
-import com.pensubito.pensubito.db.OnNewMateriaTrimestreInsertedListener;
+import com.pensubito.pensubito.db.InsertNewMateriaAsyncTask;
+import com.pensubito.pensubito.db.OnNewMateriaInsertedListener;
 import com.pensubito.pensubito.db.PensubitoDao;
 import com.pensubito.pensubito.vo.Materia;
 
@@ -27,13 +25,13 @@ import dagger.android.AndroidInjection;
 
 import static com.pensubito.pensubito.TrimestreDetailActivity.ARG_TRIMESTRE_ID;
 
-public class TrimestreMateriaAddActivity extends AppCompatActivity implements OnNewMateriaTrimestreInsertedListener {
+public class TrimestreMateriaAddActivity extends AppCompatActivity implements OnNewMateriaInsertedListener {
 
     private String mCreditoSelected;
     private String mNotaSelected;
     @Inject
     PensubitoDao pensubitoDao;
-    private InsertNewMateriaTrimestreAsyncTask mInsertNewMateriaTrimestreAsyncTask;
+    private InsertNewMateriaAsyncTask mInsertNewMateriaAsyncTask;
     private int mTrimestreId;
     private EditText mEditTextCodigoMateria;
     private EditText mEditTextNombreMateria;
@@ -115,8 +113,8 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
     @Override
     protected void onStop() {
         super.onStop();
-        if(mInsertNewMateriaTrimestreAsyncTask != null) {
-            mInsertNewMateriaTrimestreAsyncTask.cancel(false);
+        if(mInsertNewMateriaAsyncTask != null) {
+            mInsertNewMateriaAsyncTask.cancel(false);
         }
     }
 
@@ -139,9 +137,9 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
                 }
 
                 Materia newMateria = new Materia(mTrimestreId,nombreMateria,codigoMateria,mCreditoSelected,mNotaSelected);
-                mInsertNewMateriaTrimestreAsyncTask = new InsertNewMateriaTrimestreAsyncTask(pensubitoDao,newMateria);
-                mInsertNewMateriaTrimestreAsyncTask.setOnNewMateriaTrimestreInsertedListener(this);
-                mInsertNewMateriaTrimestreAsyncTask.execute();
+                mInsertNewMateriaAsyncTask = new InsertNewMateriaAsyncTask(pensubitoDao,newMateria);
+                mInsertNewMateriaAsyncTask.setOnNewMateriaTrimestreInsertedListener(this);
+                mInsertNewMateriaAsyncTask.execute();
                 return true;
 
             default:
@@ -153,7 +151,7 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
     }
 
     @Override
-    public void onNewMateriaTrimestre(int newMateriaId) {
+    public void onNewMateriaInserted(int newMateriaId) {
         Context context = getApplicationContext();
         CharSequence text = "Materia agregada";
         int duration = Toast.LENGTH_SHORT;
