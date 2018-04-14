@@ -141,7 +141,7 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
             }
             holder.mMateriaName.setText(materiaNombre);
 
-            int materiaCreditos = Integer.parseInt(materia.getCreditos());
+            int materiaCreditos = materia.getCreditos();
 
             String materiaInfo = "";
 

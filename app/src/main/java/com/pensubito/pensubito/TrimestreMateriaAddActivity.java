@@ -27,7 +27,7 @@ import static com.pensubito.pensubito.TrimestreDetailActivity.ARG_TRIMESTRE_ID;
 
 public class TrimestreMateriaAddActivity extends AppCompatActivity implements OnNewMateriaInsertedListener {
 
-    private String mCreditoSelected;
+    private int mCreditoSelected;
     private String mNotaSelected;
     @Inject
     PensubitoDao pensubitoDao;
@@ -69,7 +69,7 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
         creditosSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                mCreditoSelected = (String) parent.getItemAtPosition(pos);
+                mCreditoSelected =  Integer.parseInt((String) parent.getItemAtPosition(pos));
             }
 
             @Override

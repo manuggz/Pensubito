@@ -36,7 +36,7 @@ public class Materia {
     /***
      * Créditos de la Materia: Ej 5
      */
-    private String creditos;
+    private int creditos;
 
     /***
      * Nota de la Materia: 1-5  | R | NA
@@ -50,7 +50,7 @@ public class Materia {
     @ColumnInfo(name = "trimestre_id")
     private int trimestreId;
 
-    public Materia(int trimestreId,String nombre,String codigo,String creditos,String nota){
+    public Materia(int trimestreId,String nombre,String codigo,int creditos,String nota){
         this.trimestreId = trimestreId;
         this.nombre = nombre;
         this.codigo = codigo;
@@ -65,11 +65,11 @@ public class Materia {
         this.nota = nota;
     }
 
-    public String getCreditos() {
+    public int getCreditos() {
         return creditos;
     }
 
-    public void setCreditos(String creditos) {
+    public void setCreditos(int creditos) {
         this.creditos = creditos;
     }
 
