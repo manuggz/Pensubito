@@ -96,10 +96,22 @@ public class TrimestreTabMateriasFragment extends Fragment implements Injectable
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Materia materia = mValues.get(position);
 
-            holder.mMateriaName.setText(materia.getNombre());
-            String materiaInfo = materia.getCodigo() + materia.getCreditos() + " creditos";
+            String materiaNombre = materia.getNombre();
+            if(materiaNombre == null || materiaNombre.isEmpty()){
+                materiaNombre = "Nombre no especificado";
+            }
+            holder.mMateriaName.setText(materiaNombre);
+
+            int materiaCreditos = Integer.parseInt(materia.getCreditos());
+            String materiaInfo = materia.getCodigo() + " " + materiaCreditos + " credito" + ((materiaCreditos == 1)?"":"s");
+
             holder.mMateriaInfo.setText(materiaInfo);
-            holder.mMateriaNota.setText(materia.getNota());
+
+            String materiaNota = materia.getNota();
+            if(materiaNota == null || materiaNota.isEmpty()){
+                ///materiaNota = "Sin nota";
+            }
+            holder.mMateriaNota.setText(materiaNota);
 
             holder.itemView.setTag(materia.getTrimestreId());
             holder.itemView.setOnClickListener(mOnClickListener);

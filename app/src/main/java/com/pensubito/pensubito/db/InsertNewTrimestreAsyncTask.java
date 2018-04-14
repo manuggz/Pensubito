@@ -22,6 +22,24 @@ public class InsertNewTrimestreAsyncTask extends AsyncTask<Void, Void, Integer> 
         this.mAnyo = anyo;
     }
 
+
+    @Override
+    protected Integer doInBackground(Void... voids) {
+
+        Trimestre trimestre = new Trimestre(mPeriodoId,mAnyo);
+
+        if(pensubitoDao != null ) {
+            try {
+                int newTrimestreId = (int)pensubitoDao.insertTrimestre(trimestre);
+                return newTrimestreId ;
+            }catch (SQLiteConstraintException exception){
+                return -1;
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     protected void onPostExecute(Integer newTrimestreId) {
         OnNewTrimestreInsertedListener listener = onNewPeriodoInsertedListener.get();
@@ -33,26 +51,6 @@ public class InsertNewTrimestreAsyncTask extends AsyncTask<Void, Void, Integer> 
             }
         }
     }
-
-    @Override
-    protected Integer doInBackground(Void... voids) {
-
-        Trimestre trimestre = new Trimestre(mPeriodoId,mAnyo);
-
-        if(pensubitoDao != null ) {
-            try {
-                int newTrimestreId = (int)pensubitoDao.insertTrimestre(trimestre);
-                //Materia materia = new Materia(newTrimestreId,"Lógica Simbólica 1","CI-2525","4");
-                //pensubitoDao.insertMateria(materia);
-                return newTrimestreId ;
-            }catch (SQLiteConstraintException exception){
-                return -1;
-            }
-        }
-
-        return -1;
-    }
-
     public void setOnNewPeriodoInsertedListener(OnNewTrimestreInsertedListener onNewTrimestreInsertedListener) {
         this.onNewPeriodoInsertedListener = new WeakReference<OnNewTrimestreInsertedListener>(onNewTrimestreInsertedListener);
     }

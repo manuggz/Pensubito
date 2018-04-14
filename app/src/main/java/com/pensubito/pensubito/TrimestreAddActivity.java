@@ -123,8 +123,6 @@ public class TrimestreAddActivity extends AppCompatActivity implements OnNewTrim
         }
     }
 
-
-
     public static List<Integer> range(int min, int max) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = min; i <= max; i++) {

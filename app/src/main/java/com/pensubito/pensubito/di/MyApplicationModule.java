@@ -12,6 +12,7 @@ import com.pensubito.pensubito.MainActivity;
 import com.pensubito.pensubito.TrimestreAddActivity;
 import com.pensubito.pensubito.TrimestreDetailActivity;
 import com.pensubito.pensubito.TrimestreListActivity;
+import com.pensubito.pensubito.TrimestreMateriaAddActivity;
 
 @Module(includes = ViewModelModule.class)
 public abstract class MyApplicationModule {
@@ -24,4 +25,6 @@ public abstract class MyApplicationModule {
     abstract TrimestreAddActivity contributeTrimestreAddActivity();
     @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract TrimestreDetailActivity contributeTrimestreDetailActivity();
+    @ContributesAndroidInjector
+    abstract TrimestreMateriaAddActivity contributeTrimestreMateriaAddActivity();
 }

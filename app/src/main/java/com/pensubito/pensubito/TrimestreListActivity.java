@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pensubito.pensubito.db.PensubitoDBUtil;
-import com.pensubito.pensubito.dummy.DummyContent;
 import com.pensubito.pensubito.vm.TrimestreListViewModel;
 import com.pensubito.pensubito.vo.Trimestre;
 
