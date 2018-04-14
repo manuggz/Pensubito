@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.pensubito.pensubito"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    /* Room para persistencia de Datos */
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
+    /* LiveData y ViewModel */
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    /*
+    Google Dagger para injection de dependencias
+    https://github.com/google/dagger
+    */
+    implementation 'com.google.dagger:dagger:2.11.dagger'
+    implementation 'com.google.dagger:dagger-android:2.11'
+    implementation 'com.google.dagger:dagger-android-support:2.11'
+    // if you use the support libraries
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+    // Timber, a logger https://github.com/JakeWharton/timber
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+
+}

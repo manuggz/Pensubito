@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_trimestre_list"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_materia_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                tools:text="Inglés I" />
+
+            <TextView
+                android:id="@+id/tv_materia_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="?attr/actionMenuTextColor"
+                tools:text="ID1111 3 creditos" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_materia_nota"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="?attr/actionMenuTextColor"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="5" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/line" />
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Pensubito</string>
+    <string name="title_trimestre_list">Plan de Estudio</string>
+    <string name="title_trimestre_detail">Trimestre Detail</string>
+
+</resources>
