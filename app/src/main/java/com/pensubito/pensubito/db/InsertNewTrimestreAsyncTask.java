@@ -26,7 +26,9 @@ public class InsertNewTrimestreAsyncTask extends AsyncTask<Void, Void, Integer> 
     @Override
     protected Integer doInBackground(Void... voids) {
 
-        Trimestre trimestre = new Trimestre(mPeriodoId,mAnyo);
+        Trimestre trimestre = new Trimestre();
+        trimestre.setPeriodoId(mPeriodoId);
+        trimestre.setAnyo(mAnyo);
 
         if(pensubitoDao != null ) {
             try {

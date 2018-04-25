@@ -66,6 +66,8 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
         Spinner creditosSpinner = (Spinner) findViewById(R.id.sp_creditos_materia);
         // Apply the adapter to the spinner
         creditosSpinner.setAdapter(creditosAdapter);
+        creditosSpinner.setSelection(creditosAdapter.getPosition("3"));
+
         creditosSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -88,6 +90,7 @@ public class TrimestreMateriaAddActivity extends AppCompatActivity implements On
         Spinner notasSpinner = (Spinner) findViewById(R.id.sp_notas_materia);
         // Apply the adapter to the spinner
         notasSpinner.setAdapter(notasAdapter);
+        notasSpinner.setSelection(notasAdapter.getPosition("3"));
         notasSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,int pos, long id) {

@@ -17,14 +17,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pensubito.pensubito.db.PensubitoDBUtil;
+import com.pensubito.pensubito.pojosdao.MateriaTrimestreID;
+import com.pensubito.pensubito.util.USBAlgoritmos;
 import com.pensubito.pensubito.vm.TrimestreListViewModel;
 import com.pensubito.pensubito.vo.Trimestre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import timber.log.Timber;
 
 /**
  */
@@ -71,18 +75,26 @@ public class TrimestreListActivity extends AppCompatActivity {
         // in content do not change the layout size of the RecyclerView
         mRecyclerView = findViewById(R.id.trimestre_list);
         mRecyclerView.setHasFixedSize(true);
-        viewModel.getTrimestres().observe(this, new Observer<List<Trimestre>>() {
+        viewModel.getAllMateriasTrimestreID().observe(this, new Observer<List<MateriaTrimestreID>>() {
             @Override
-            public void onChanged(@Nullable List<Trimestre> trimestres) {
-                setUpAdapter(trimestres);
+            public void onChanged(@Nullable List<MateriaTrimestreID> trimestresMateria) {
+                updateGUIList(trimestresMateria);
             }
         });
+    }
+
+    private void updateGUIList(@Nullable List<MateriaTrimestreID> trimestresMateria){
+        // Establecemos los trimestres a la lista
+        if(trimestresMateria == null) return;
+
+        List<Trimestre> trimestres = USBAlgoritmos.calculateDataTrimestres(trimestresMateria);
+
+        setUpAdapter(trimestres);
     }
 
     private void setUpAdapter(@Nullable List<Trimestre> trimestres){
         // Establecemos los trimestres a la lista
         if(trimestres == null) return;
-
         mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, trimestres, mTwoPane));
     }
 
@@ -137,8 +149,26 @@ public class TrimestreListActivity extends AppCompatActivity {
             String periodoID = PensubitoDBUtil.convertIDPeriodoToString(trimestre.getPeriodoId()) + " " +String.valueOf(trimestre.getAnyo());
 
             holder.mPeriodoId.setText(periodoID);
-            holder.mPeriodoInfo.setText("4 Materias 3.03");
-            holder.mIndiceAcumulado.setText("3.03");
+            String periodoInfo = String.valueOf(trimestre.getnMaterias());
+            if(trimestre.getnMaterias() == 1) {
+                periodoInfo += " Materia";
+            }else{
+                periodoInfo += " Materias";
+            }
+
+            if(trimestre.getIndiceAcumuladoActual() >= 0) {
+                periodoInfo += " " + USBAlgoritmos.roundIndice(trimestre.getIndiceAcumuladoActual());
+            }else{
+                periodoInfo += " NC";
+            }
+
+            holder.mPeriodoInfo.setText(periodoInfo);
+
+            if(trimestre.getIndiceTrimestre() >= 0) {
+                holder.mIndiceAcumulado.setText(USBAlgoritmos.roundIndice(trimestre.getIndiceTrimestre()));
+            }else{
+                holder.mIndiceAcumulado.setText("NC");
+            }
 
             holder.itemView.setTag(trimestre.getTrimestreId());
             holder.itemView.setOnClickListener(mOnClickListener);

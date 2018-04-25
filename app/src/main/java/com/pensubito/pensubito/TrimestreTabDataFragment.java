@@ -13,12 +13,15 @@ import android.widget.TextView;
 
 import com.pensubito.pensubito.db.PensubitoDBUtil;
 import com.pensubito.pensubito.di.Injectable;
+import com.pensubito.pensubito.pojosdao.MateriaTrimestreID;
 import com.pensubito.pensubito.util.USBAlgoritmos;
 import com.pensubito.pensubito.vm.TrimestreViewModel;
 import com.pensubito.pensubito.vo.Materia;
 import com.pensubito.pensubito.vo.Trimestre;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -31,6 +34,9 @@ public class TrimestreTabDataFragment extends Fragment implements Injectable {
     private TrimestreViewModel viewModel;
     private TextView textViewPeriodoName;
     private TextView textViewIndiceObtenido;
+    private TextView textViewIndiceAcumulado;
+    private TextView textViewIndiceContribucion;
+    private int trimestreId;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -42,42 +48,55 @@ public class TrimestreTabDataFragment extends Fragment implements Injectable {
 
         textViewPeriodoName = ((TextView) rootView.findViewById(R.id.tv_periodo_name));
         textViewIndiceObtenido = ((TextView) rootView.findViewById(R.id.tv_periodo_io));
+        textViewIndiceAcumulado = ((TextView) rootView.findViewById(R.id.tv_periodo_ia));
+        textViewIndiceContribucion = ((TextView) rootView.findViewById(R.id.tv_periodo_cont_ia));
 
         Bundle args = getArguments();
 
-        int trimestreId = args.getInt(TrimestreDetailActivity.ARG_TRIMESTRE_ID);
+        trimestreId = args.getInt(TrimestreDetailActivity.ARG_TRIMESTRE_ID);
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(TrimestreViewModel.class);
         viewModel.init(trimestreId);
-        viewModel.getTrimestre().observe(this, new Observer<Trimestre>() {
+        viewModel.getAllMateriasTrimestreID().observe(this, new Observer<List<MateriaTrimestreID>>() {
             @Override
-            public void onChanged(@Nullable Trimestre trimestre) {
-                if(trimestre != null) {
-                    updateUITrimestre(trimestre);
-                }
-            }
-        });
-        viewModel.getAllMaterias().observe(this, new Observer<List<Materia>>() {
-            @Override
-            public void onChanged(@Nullable List<Materia> materias) {
+            public void onChanged(@Nullable List<MateriaTrimestreID> materias) {
                 if(materias != null) {
-                    updateUIMaterias(materias);
+                    updateUI(materias);
                 }
             }
         });
+
         return rootView;
+    }
+
+    public void updateUI(List<MateriaTrimestreID> materiaTrimestreIDList){
+
+        ArrayList<Trimestre> trimestres = USBAlgoritmos.calculateDataTrimestres(materiaTrimestreIDList);
+
+        for (Trimestre trimestre: trimestres) {
+            if(trimestre.getTrimestreId() == trimestreId){
+                updateUITrimestre(trimestre);
+
+                if(trimestre.getIndiceTrimestre() >= 0) {
+                    textViewIndiceObtenido.setText(String.valueOf(trimestre.getIndiceTrimestre()));
+                }else{
+                    textViewIndiceObtenido.setText("No calculable");
+                }
+                if(trimestre.getIndiceAcumuladoActual() >= 0) {
+                    textViewIndiceAcumulado.setText(String.valueOf(trimestre.getIndiceAcumuladoActual()));
+                }else{
+                    textViewIndiceAcumulado.setText("No calculable");
+                }
+
+                double contribucionIndice = trimestre.getContribucionAlIndiceAcumulado();
+                Locale spanish = new Locale("es", "ES");
+                textViewIndiceContribucion.setText(String.format(spanish,"%+f",contribucionIndice));
+            }
+        }
     }
 
     public void updateUITrimestre(Trimestre trimestre){
         String periodoID = PensubitoDBUtil.convertIDPeriodoToString(trimestre.getPeriodoId()) + " " + String.valueOf(trimestre.getAnyo());
 
         textViewPeriodoName.setText(periodoID);
-    }
-    public void updateUIMaterias(List<Materia> materias){
-        double indiceTrimestre = USBAlgoritmos.calcularIndiceTrimestre(materias);
-        if(indiceTrimestre >= 1) {
-            textViewIndiceObtenido.setText(String.valueOf(indiceTrimestre));
-        }else{
-            textViewIndiceObtenido.setText("No calculable");
-        }
     }
 }

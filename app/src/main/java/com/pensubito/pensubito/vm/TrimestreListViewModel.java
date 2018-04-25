@@ -3,6 +3,8 @@ package com.pensubito.pensubito.vm;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.pensubito.pensubito.db.PensubitoDao;
+import com.pensubito.pensubito.pojosdao.MateriaTrimestreID;
 import com.pensubito.pensubito.vo.Trimestre;
 
 import java.util.List;
@@ -29,6 +31,10 @@ public class TrimestreListViewModel extends ViewModel {
 
     public LiveData<List<Trimestre>> getTrimestres() {
         return trimestreRepositorio.loadTrimestres();
+    }
+
+    public LiveData<List<MateriaTrimestreID>> getAllMateriasTrimestreID() {
+        return trimestreRepositorio.loadAllMateriasTrimestreID();
     }
 
 }

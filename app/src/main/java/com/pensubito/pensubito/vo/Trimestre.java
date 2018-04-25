@@ -2,6 +2,7 @@ package com.pensubito.pensubito.vo;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -33,7 +34,21 @@ public class Trimestre {
      * Año en el que se curso el trimestre
      * */
     private int anyo;
-    public Trimestre(int periodoId,int anyo){
+
+    @Ignore
+    private double indiceAcumuladoActual;
+    @Ignore
+    private double indiceTrimestre;
+    @Ignore
+    private int nMaterias;
+    @Ignore
+    private double contribucionAlIndiceAcumulado;
+
+    public Trimestre(){
+    }
+
+    public Trimestre(int trimestreId,int periodoId,int anyo){
+        this.trimestreId = trimestreId;
         this.periodoId = periodoId;
         this.anyo = anyo;
     }
@@ -59,5 +74,37 @@ public class Trimestre {
 
     public void setTrimestreId(int trimestreId) {
         this.trimestreId = trimestreId;
+    }
+
+    public double getIndiceAcumuladoActual() {
+        return indiceAcumuladoActual;
+    }
+
+    public void setIndiceAcumuladoActual(double indiceAcumuladoActual) {
+        this.indiceAcumuladoActual = indiceAcumuladoActual;
+    }
+
+    public double getIndiceTrimestre() {
+        return indiceTrimestre;
+    }
+
+    public void setIndiceTrimestre(double indiceTrimestre) {
+        this.indiceTrimestre = indiceTrimestre;
+    }
+
+    public int getnMaterias() {
+        return nMaterias;
+    }
+
+    public void setnMaterias(int nMaterias) {
+        this.nMaterias = nMaterias;
+    }
+
+    public double getContribucionAlIndiceAcumulado() {
+        return contribucionAlIndiceAcumulado;
+    }
+
+    public void setContribucionAlIndiceAcumulado(double contribucionAlIndiceAcumulado) {
+        this.contribucionAlIndiceAcumulado = contribucionAlIndiceAcumulado;
     }
 }

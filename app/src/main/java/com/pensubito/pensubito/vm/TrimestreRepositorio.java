@@ -3,6 +3,7 @@ package com.pensubito.pensubito.vm;
 import android.arch.lifecycle.LiveData;
 
 import com.pensubito.pensubito.db.PensubitoDao;
+import com.pensubito.pensubito.pojosdao.MateriaTrimestreID;
 import com.pensubito.pensubito.vo.Materia;
 import com.pensubito.pensubito.vo.Trimestre;
 
@@ -46,6 +47,10 @@ public class TrimestreRepositorio {
         //});
 
         return pensubitoDao.loadAllTrimestres();
+    }
+
+    public LiveData<List<MateriaTrimestreID>> loadAllMateriasTrimestreID(){
+        return pensubitoDao.loadAllMateriasTrimestreID();
     }
     public LiveData<List<Materia>> loadAllMateriasFromTrimestreId(int trimestre_id) {
 

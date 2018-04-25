@@ -194,7 +194,6 @@ public class TrimestreDetailActivity extends AppCompatActivity implements HasSup
 
         @Override
         public Fragment getItem(int position) {
-            Timber.d("tr-det position position " + String.valueOf(position));
             Fragment fragment;
             Bundle args;
             switch (position){
@@ -211,7 +210,6 @@ public class TrimestreDetailActivity extends AppCompatActivity implements HasSup
                     fragment.setArguments(args);
                     return fragment;
                 default:
-                    Timber.d("tr-det position unknown " + String.valueOf(position));
                     return null;
             }
         }

@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.pensubito.pensubito.pojosdao.MateriaTrimestreID;
 import com.pensubito.pensubito.vo.Materia;
 import com.pensubito.pensubito.vo.Trimestre;
 
@@ -90,6 +91,8 @@ public interface PensubitoDao {
      */
     @Query("SELECT * from materia WHERE trimestre_id = :trimestreId")
     public LiveData<List<Materia>> loadAllMateriasFromTrimestreId(int trimestreId);
+
+
     /**
      * Regresa un trimestre en particular
      * @return Trimestre
@@ -102,4 +105,19 @@ public interface PensubitoDao {
 
     @Query("DELETE from materia WHERE materia_id = :materiaId")
     public void deleteMateria(int materiaId);
+
+    @Query("SELECT trimestre.trimestre_id AS trimestreId"
+            + ", trimestre.periodo_id AS periodoId "
+            + ", trimestre.anyo "
+            + ", materia.materia_id AS materiaID "
+            + ", materia.creditos "
+            + ", materia.nota "
+            + "FROM trimestre "
+            + "LEFT JOIN materia "
+            + "ON trimestre.trimestre_id = materia.trimestre_id "
+            + "ORDER BY trimestre.trimestre_id ASC"
+    )
+    public LiveData<List<MateriaTrimestreID>> loadAllMateriasTrimestreID();
+
+
 }
